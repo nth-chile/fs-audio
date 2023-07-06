@@ -1,1 +1,0 @@
-{"identifiers":["RogerMcGuinnTomPettyAndTheHeartbreakersBobDylan1987-10-04ArenaCivicaDiMilanoItaly"]}

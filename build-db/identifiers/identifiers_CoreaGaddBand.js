@@ -1,1 +1,0 @@
-{"identifiers":["CoreaGaddBand2017-11-17VictoriaHallGenevaSwitzerland"]}

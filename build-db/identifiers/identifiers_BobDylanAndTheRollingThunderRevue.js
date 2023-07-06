@@ -1,1 +1,0 @@
-{"identifiers":["BobDylanAndTheRollingThunderRevue1975-11-24CivicCenterArenaHartfordCT","BobDylanAndTheRollingThunderRevue1975-11-20HarvardSquareTheaterCambridgeMA","BobDylanAndTheRollingThunderRevue1976-04-25UniversityOfFloridaGainesvilleFL","BobDylanAndTheRollingThunderRevue1975CowboyAngelBluesBoot"]}

@@ -1,1 +1,0 @@
-{"identifiers":["NewportFolkFestival1989-08HyattRedboneBuckwheatZ_NewportRI","NewportFolkFestival1998-08-07VikingHotelNewportRI","NewportFolkFestival1989RI"]}

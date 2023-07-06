@@ -1,1 +1,0 @@
-{"identifiers":["BruceSpringsteenAndFriends2011-01-15ParamountTheatreAsburyParkNJ","BruceSpringsteenAndFriends2000-12-17ConventionHallAsburyParkNJ"]}

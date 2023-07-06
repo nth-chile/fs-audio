@@ -1,1 +1,0 @@
-{"identifiers":["MarkKnopflerBobDylan2011-11-09PalafabrisPadovaItaly"]}

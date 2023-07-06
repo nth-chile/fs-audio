@@ -1,1 +1,0 @@
-{"identifiers":["U2BBKing1989-12-15WestfalenhalleDortmundGermany","U2BBKing1989-12-16WestfalenhalleDortmundGermany"]}

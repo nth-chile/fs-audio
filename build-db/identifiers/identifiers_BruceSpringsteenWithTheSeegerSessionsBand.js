@@ -1,1 +1,0 @@
-{"identifiers":["BruceSpringsteenWithTheSeegerSessionsBand2006-10-29OsloSpektrumNorway","BruceSpringsteenWithTheSeegerSessionsBand2006-06-17TheCenterAtDetroitMI","BruceSpringsteenWithTheSeegerSessionsBand2006-05-27TweeterCenterMansfieldMA"]}

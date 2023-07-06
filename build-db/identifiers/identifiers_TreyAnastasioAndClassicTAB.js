@@ -1,1 +1,0 @@
-{"identifiers":["TreyAnastasioAndClassicTAB2010-02-19TheRivieraTheaterChicagoIL","TreyAnastasioAndClassicTAB2010-02-18MilwaukeeWI","TreyAnastasioAndClassicTAB2010-02-23ThePageantStLouisMO","TreyAnastasioAndClassicTAB2010-02-21UptownTheatreKansasCityMO","TreyAnastasioAndClassicTAB2010-02-20StateTheaterMinneapolisMN"]}

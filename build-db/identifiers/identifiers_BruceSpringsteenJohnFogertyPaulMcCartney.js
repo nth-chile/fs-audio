@@ -1,1 +1,0 @@
-{"identifiers":["BruceSpringsteenJohnFogertyPaulMcCartney2012-07-14HydeParkLondonUK"]}

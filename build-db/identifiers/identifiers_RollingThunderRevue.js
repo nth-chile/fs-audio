@@ -1,1 +1,0 @@
-{"identifiers":["RollingThunderRevue1976-04-15CivicCenterLakelandFL","RollingThunderRevue1975-11-04LateCivicCenterProvidenceRI","RollingThunderRevue1975-11-15LateNiagraConventionCenterNY"]}

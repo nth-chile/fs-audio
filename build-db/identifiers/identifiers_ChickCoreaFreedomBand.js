@@ -1,1 +1,0 @@
-{"identifiers":["ChickCoreaFreedomBand2010-07-09DeBijlokeGentBelgium","ChickCoreaFreedomBand2010-07-10NorthSeaJazzFestivalRotterdamHolland","ChickCoreaFreedomBand2010-07-12MontreuxJazzFestivalSwitzerland"]}

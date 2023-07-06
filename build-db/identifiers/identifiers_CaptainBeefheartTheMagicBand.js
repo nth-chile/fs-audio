@@ -1,1 +1,0 @@
-{"identifiers":["CaptainBeefheartTheMagicBand1973-05-01LeicesterUniversityUK","CaptainBeefheartTheMagicBand1978-11-11ParadiseClubBostonMA"]}

@@ -1,1 +1,0 @@
-{"identifiers":["KellerWilliamsTrio2015-08-29CaboozeMinneapolisMN","KellerWilliamsTrio2015-09-26RobWassermanRodneyHolmesTralfMusicHallBuffaloNY","KellerWilliamsTrio2015-10-23AggieTheatreFortCollinsCO","KellerWilliamsTrio2015-10-23AggieTheatreAggieTheatreFortCollinsCO"]}

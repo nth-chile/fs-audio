@@ -1,1 +1,0 @@
-{"identifiers":["RollingStone2003-07-09StadeDeFranceParisFrance"]}

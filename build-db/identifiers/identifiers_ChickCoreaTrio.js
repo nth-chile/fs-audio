@@ -1,1 +1,0 @@
-{"identifiers":["ChickCoreaTrio2012-11-20FestspielhausStPoeltenAustria","ChickCoreaTrio2004-08-17CopleySymphonyHallLaJollaCA","ChickCoreaTrio1987-10-20JazzJamboreeFestivalWarsawPoland"]}

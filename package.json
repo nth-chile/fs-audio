@@ -1,29 +1,37 @@
 {
-  "name": "sugarstream",
-  "version": "1.0.0",
   "scripts": {
-    "compile-js": "babel ./src/scripts -d ./public/scripts",
-    "watch-js": "babel ./src/scripts -d ./public/scripts -w",
-    "compile-scss": "node-sass src/style/style.scss public/style/style.css",
-    "watch-scss": "yarn compile-scss && node-sass src/style/style.scss -w public/style/style.css",
-    "autoprefixer": "postcss public/style/style.css --use autoprefixer -o public/style/style.css",
-    "watch-autoprefixer": "postcss public/style/style.css --use autoprefixer -o public/style/style.css --watch",
-    "build": "cp src/index.html public/index.html && yarn compile-js & yarn compile-scss & yarn autoprefixer",
-    "dev": "cp src/index.html public/index.html && yarn watch-js & yarn watch-scss & yarn watch-autoprefixer"
+    "dev": "rm -rf dist && tsc -w & postcss src/style.css --dir dist -w",
+    "build": "rm -rf dist && tsc & postcss src/style.css --dir dist"
   },
   "author": "Jared Salzano",
   "license": "MIT",
-  "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "mongodb": "^3.5.4",
-    "node-sass": "^7.0.3",
-    "url": "^0.11.0"
+  "volta": {
+    "node": "18.16.1"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./fs-audio-internet-archive": "./dist/fs-audio-internet-archive/index.js"
   },
   "devDependencies": {
-    "autoprefixer": "^9.7.4",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "postcss-cli": "^7.1.0",
-    "puppeteer": "^1.4.0"
+    "@types/node": "^20.3.2",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "autoprefixer": "^10.4.14",
+    "cssnano": "^6.0.1",
+    "eslint": "^8.43.0",
+    "postcss": "^8.4.24",
+    "postcss-cli": "^10.1.0",
+    "postcss-load-config": "^4.0.1",
+    "postcss-nested": "^6.0.1",
+    "stylelint-config-standard": "^33.0.0",
+    "typescript": "^5.1.5"
+  },
+  "dependencies": {
+    "@types/howler": "^2.2.7",
+    "@types/qs": "^6.9.7",
+    "howler": "^2.2.3",
+    "qs": "^6.11.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+
+.fsa-container {
+  background-color: #230176;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  white-space: nowrap;
+
+  &.fsa-container--player-hidden {
+    .fsa-player {
+      /* These aren't set heights, just computed heights */
+      margin-bottom: -125px;
+
+      @media(width > 768px) {
+        margin-bottom: -71px;
+      }
+    }
+  }
+
+  header {
+    background: linear-gradient(to bottom, #230176, #1b016e);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    box-shadow: 2px 2px 2px #030156;
+    padding: 10px 30px;
+    font-size: 36px;
+
+    button {
+      color: #84ff16;
+      font-weight: bold;
+      justify-self: start;
+    }
+
+    h1 {
+      color: #84ff16;
+      font-weight: bold;
+      justify-self: center;
+    }
+  }
+
+  .fsa-list {
+    color: #fff;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: auto;
+
+    li {
+      border-bottom: 1px solid #030156;
+      cursor: pointer;
+
+      &:hover,
+      &:focus {
+        background-color: #2c0297;
+
+        .fsa-list-item-name,
+        .fsa-list-item-duration {
+          color: #84ff16;
+        }
+      }
+    }
+  
+    a {
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .fsa-list-item-left {
+    display: flex;
+    min-width: 0;
+  }
+
+  .fsa-list-item-name {
+    margin-right: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fsa-list-item-name,
+  .fsa-list-item-duration {
+    color: #1abaff;
+  }
+
+  .fsa-player {
+    background-color: #00a1e6;
+    color: #fff;
+    font-family: Akshar, sans-serif;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    padding: 10px;
+    transition: margin 300ms;
+
+    @media (width > 768px) {
+      flex-direction: row;
+    }
+  }
+
+  .fsa-player-title {
+    font-size: 27px;
+    margin-right: 5px;
+  }
+
+  .fsa-player-date {
+    font-size: 20px;
+    margin-right: 5px;
+  }
+
+  .fsa-player-venue {
+    font-size: 15px;
+  }
+
+  .fsa-player-time {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  .fsa-player-metadata {
+    align-items: baseline;
+    display: flex;
+    justify-content: space-between;
+    min-width: 0;
+    width: 100%;
+
+    & > div:first-of-type {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .fsa-player-other-stuff {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .fsa-player-buttons {
+    display: flex;
+    align-items: flex-end;
+
+    svg {
+      pointer-events: none;
+    }
+  }
+
+  .fsa-player-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    height: 40px;
+    width: 45px;
+    box-shadow: 0 4px 0 #a05e0e;
+    margin-bottom: 4px;
+    margin-right: 10px;
+    background-color: #ec8e1d;
+
+    &.fsa-player-button--pressed {
+      box-shadow: 0 2px 0 #a05e0e;
+      margin-bottom: 2px; 
+    }
+  }
+
+  .fsa-player-scrubber {
+    border-radius: 3px;
+    box-shadow: 0.5px 0.5px 0.5px #2c0297;
+    cursor: pointer;
+    height: 10px;
+    background: linear-gradient(to bottom, #84ff16, #6be600);
+    overflow: hidden;
+  }
+
+  .fsa-player-scrubber-elapsed {
+    background: linear-gradient(to bottom, #230176, #16014c);
+    height: 100%;
+    width: 0%;
+  }
+}

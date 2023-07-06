@@ -1,1 +1,0 @@
-{"identifiers":["KingGizzardAndTheLiazardWizard2016-02-28ZBauRoterSalonNuernbergGermany","KingGizzardAndTheLiazardWizard2017-03-30TrocaderoTheatrePhiladelphiaPA","KingGizzardAndTheLiazardWizard2017-06-17FreakValleyFestivalNetphenGermany","KingGizzardAndTheLiazardWizard2017-01-25WorldCafePhiladelphiaPA","KingGizzardAndTheLiazardWizard2017-09-27VarietyPlayhouseAtlantaGA"]}

@@ -1,1 +1,0 @@
-{"identifiers":["TomPettyRogerMcGuinn1987-10-08VorstNationaalBrusselsBelgium","TomPettyRogerMcGuinn1987-10-12AnArenaBirminghamUK","TomPettyRogerMcGuinn1987-10-17WembleyArenaLondonUK"]}

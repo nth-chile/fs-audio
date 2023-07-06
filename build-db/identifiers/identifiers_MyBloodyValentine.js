@@ -1,1 +1,0 @@
-{"identifiers":["MyBloodyValentine1989-03-13ManegeMuenchenGermany","MyBloodyValentine2013-02-07-ShinkibaStudioCoastTokyoJapan","MyBloodyValentine2013-11-12HammersteinBallroomNYC"]}

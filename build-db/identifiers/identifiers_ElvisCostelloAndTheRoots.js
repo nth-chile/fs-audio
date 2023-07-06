@@ -1,1 +1,0 @@
-{"identifiers":["ElvisCostelloAndTheRoots2013-09-16BrooklynBowlNY","ElvisCostelloAndTheRoots2013-09-24TheWorldCafePhiladelphiaPA","ElvisCostelloAndTheRoots2014-03-12CapitolTheaterPortChesterNY","ElvisCostelloAndTheRoots2014-03-12TheCapitolTheatrePortChesterNY"]}

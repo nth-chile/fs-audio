@@ -1,1 +1,0 @@
-{"identifiers":["ChickCoreaQuintet1996-07-20RememberingBudPowellPinedeGouldAntibesFrance","ChickCoreaQuintet2016-07-12BeethovensaalLiederhalleStuttgartGermany","ChickCoreaQuintet2016-07-12LiederhalleBeethovensaalStuttgartGermany"]}

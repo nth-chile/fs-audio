@@ -1,1 +1,0 @@
-{"identifiers":["BruceSpringsteenAndTheStreetBand2003-05-26CrystalPalaceStadiumLondonUK"]}

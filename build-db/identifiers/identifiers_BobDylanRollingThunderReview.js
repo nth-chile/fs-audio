@@ -1,1 +1,0 @@
-{"identifiers":["BobDylanRollingThunderReview1976-05-16FortWorthTX","BobDylanRollingThunderReview1976-05-04AssemblyCenterBatonRougeLA"]}

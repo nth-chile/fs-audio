@@ -1,1 +1,0 @@
-{"identifiers":["ChickCoreaQuartet1995-10-18TheKeswickTheaterGlensidePA","ChickCoreaQuartet1995-09-16MontereyJazzfestivalCA","ChickCoreaQuartet1971-01-25JazzhouseHamburgGermany","ChickCoreaQuartet1993-07-01TeatroRomanoVeronaItaly"]}
