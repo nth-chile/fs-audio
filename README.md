@@ -1,10 +1,10 @@
-# fs-setlists-web
+# fs-shows-web
 
 ## What is it?
 
-fs-setlists is a lib for making a React app similar to https://phishtracks.com or https://relisten.net without using a database. You can use it to browse and stream live music that is stored on a web server, cloud platform, storage bucket, etc.
+fs-shows is a lib for making a React app similar to https://phishtracks.com or https://relisten.net without using a database. You can use it to browse and stream live music that is stored on a web server, cloud platform, storage bucket, etc.
 
-The "fs" in "fs-setlists" stands for filesystem. That's because the React app is built upon metadata parsed from filename of the tracks. There are a few reasons for this:
+The "fs" in "fs-shows" stands for filesystem. That's because the React app is built upon metadata parsed from filename of the tracks. There are a few reasons for this:
 
 - Your backup location (assuming you use cloud storage) can also be the location your web player sources its content from
 - It encourages you to keep your local copies organized. They'll always have consistent, informative, and alphabetical (by date and then optionally track number) names
