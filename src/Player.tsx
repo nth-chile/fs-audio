@@ -52,26 +52,28 @@ export default function Player({
   const [currentTrackListItemIndex, setCurrentTrackListItemIndex]= useState<number | null>(null)
   const [playerTitle, setPlayerTitle] = useState('')
   const [playerDate, setPlayerDate] = useState('')
-  const [playerVenue, setPlayerVenue] = useState('')
+  const [venue, setVenue] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
   const playbackInterval = useRef<any>(null)
   const scrubberRef = useRef<HTMLDivElement>(null)
   const scrubberElapsedRef = useRef<HTMLDivElement>(null)
 
-  function selectTrack(listItemIndex: number) {
+  function selectTrack(track: FSS.Track) {
+    // @ts-ignore
+    if (howl && howl._src === track.src) {
+      return
+    }
+
     if (howl) {
       clearInterval(playbackInterval.current)
       howl.unload()
       setHowl(null)
     }
 
-    const track = listItems[listItemIndex] 
-    
     setElapsed(null)
     setDuration(null)
     setPlayerTitle(track.name)
     setPlayerDate(track.date)
-    setPlayerVenue(track.venue || '')
     
     const newHowl = new Howl({
       autoplay: true,
@@ -133,12 +135,21 @@ export default function Player({
     handleHashChange()
     addEventListener("hashchange", handleHashChange)
 
+    return () => {
+      removeEventListener("hashchange", handleHashChange)
+    }
+  }, [location.hash])
+
+  useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      if (
-        document.activeElement?.tagName === "A" ||
-        document.activeElement?.tagName === "BUTTON"
-      ) {
+      if (document.activeElement?.tagName === "A") {
         return
+      }
+
+      if (document.activeElement?.tagName === "BUTTON") {
+        if (!document.activeElement.classList.contains("fsa-list-item-track")) {
+          return
+        }
       }
 
       if (e.code === 'Space' && !!howl) {
@@ -149,22 +160,39 @@ export default function Player({
     addEventListener('keydown', handleKeydown)
 
     return () => {
-      removeEventListener("hashchange", handleHashChange)
       removeEventListener('keydown', handleKeydown)
     }
-  }, [howl, location.hash])
+  }, [howl, isPlaying])
 
   useEffect(() => {
     if (yearsDirectory && !pathParts.year && !pathParts.date) {
       setListItems(getYearsListFromTracks(baseHref, data))
     } else if ((!yearsDirectory || pathParts.year) && !pathParts.date) {
-      setListItems(getDateAndVenueListFromTracks(baseHref, yearsDirectory, pathParts.year || "", data))
+      const listItems = getDateAndVenueListFromTracks(baseHref, yearsDirectory, pathParts.year || "", data)
+      setListItems(listItems)
     } else if (pathParts.date) {
       const tracklist = getTrackListFromTracks(baseHref, yearsDirectory, pathParts.date, data)
       setListItems(tracklist)
       getDurationsForTracks(tracklist).then(setListItems);
+      
+      const listItemWithVenue = tracklist.find(i => i.venue)
+      setVenue(listItemWithVenue && listItemWithVenue.venue ? listItemWithVenue.venue : '')
     }
   }, [baseHref, pathParts])
+
+  useEffect(() => {
+    let newTitle = pathParts.date || (yearsDirectory && pathParts.year)
+
+    if (newTitle && venue) {
+      newTitle = `${newTitle} @ ${venue}`
+    }
+    
+    if (!newTitle) {
+      newTitle = titleFromProps
+    }
+
+    setTitle(newTitle)
+  }, [pathParts, yearsDirectory, venue])
 
   useEffect(() => {
     if (typeof userScrubPercent === "number") {
@@ -216,7 +244,9 @@ export default function Player({
     if (currentTrackListItemIndex === 0 && isPlaying) {
       howl?.seek(0)
     } else if (listItems[currentTrackListItemIndex - 1]?.isTrack) {
-      setCurrentTrackListItemIndex(currentTrackListItemIndex - 1)
+      const newIndex = currentTrackListItemIndex - 1
+      setCurrentTrackListItemIndex(newIndex)
+      selectTrack(listItems[newIndex])
     }
   }
 
@@ -227,20 +257,15 @@ export default function Player({
       currentTrackListItemIndex + 1 &&
       listItems[currentTrackListItemIndex + 1]?.isTrack
     ) {
-      setCurrentTrackListItemIndex(currentTrackListItemIndex + 1)
+      const newIndex = currentTrackListItemIndex + 1
+      setCurrentTrackListItemIndex(newIndex)
+      selectTrack(listItems[newIndex])
     }
   }
 
-  useEffect(() => {
-    if (typeof currentTrackListItemIndex === "number") {
-      selectTrack(currentTrackListItemIndex)
-    }
-  }, [currentTrackListItemIndex])
-
-  function onListItemClick (listItemIndex: number, listItem: any) {
-    if (listItem.isTrack) {
-      setCurrentTrackListItemIndex(listItemIndex)
-    }
+  function onListItemClick (listItemIndex: number) {
+    setCurrentTrackListItemIndex(listItemIndex)
+    selectTrack(listItems[listItemIndex])
   }
 
   return (
@@ -252,13 +277,21 @@ export default function Player({
       <ul className="fsa-list">
         {listItems.map((i, listItemIndex) => (
           <li className="fsa-list-item" key={`${i.date}${i.venue}${i.year}${i.name}`}>
-            <a href={i.href} onClick={() => onListItemClick(listItemIndex, i)}>
-              <div className="fsa-list-item-left">
-                {i.name && <span className="fsa-list-item-name">{i.name}</span>}
-                {!i.name && <span className="fsa-list-item-name">{i.date}{i.venue && ` @ ${i.venue}`}{i.year}</span>}
-              </div>
-              <div className="fsa-list-item-duration">{i.duration}</div>
-            </a>
+            {i.isTrack && (
+              <button className="fsa-list-item-track" onClick={() => onListItemClick(listItemIndex)}>
+                <div className="fsa-list-item-left">
+                  <span className="fsa-list-item-name">{i.name}</span>
+                </div>
+                <div className="fsa-list-item-duration">{i.duration}</div>
+              </button>
+            )}
+            {!i.isTrack && (
+              <a href={i.href}>
+                <div className="fsa-list-item-left">
+                  <span className="fsa-list-item-name">{i.date}{i.venue && ` @ ${i.venue}`}{i.year}</span>
+                </div>
+              </a>
+            )}
           </li>
         ))}
       </ul>
@@ -295,7 +328,7 @@ export default function Player({
             <div>
               <span className="fsa-player-title">{playerTitle}</span>
               <span className="fsa-player-date">{playerDate}</span>
-              <span className="fsa-player-venue">{playerVenue}</span>
+              <span className="fsa-player-venue">{venue}</span>
             </div>
             <div className="fsa-player-time">{ elapsed ? millisecondsToMinutesAndSeconds(elapsed * 1000) : "--:--" } / { duration ? millisecondsToMinutesAndSeconds(duration * 1000) : "--:--" }</div>
           </div>

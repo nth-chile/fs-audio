@@ -49,23 +49,25 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
     const [currentTrackListItemIndex, setCurrentTrackListItemIndex] = (0, react_1.useState)(null);
     const [playerTitle, setPlayerTitle] = (0, react_1.useState)('');
     const [playerDate, setPlayerDate] = (0, react_1.useState)('');
-    const [playerVenue, setPlayerVenue] = (0, react_1.useState)('');
+    const [venue, setVenue] = (0, react_1.useState)('');
     const [isPlaying, setIsPlaying] = (0, react_1.useState)(false);
     const playbackInterval = (0, react_1.useRef)(null);
     const scrubberRef = (0, react_1.useRef)(null);
     const scrubberElapsedRef = (0, react_1.useRef)(null);
-    function selectTrack(listItemIndex) {
+    function selectTrack(track) {
+        // @ts-ignore
+        if (howl && howl._src === track.src) {
+            return;
+        }
         if (howl) {
             clearInterval(playbackInterval.current);
             howl.unload();
             setHowl(null);
         }
-        const track = listItems[listItemIndex];
         setElapsed(null);
         setDuration(null);
         setPlayerTitle(track.name);
         setPlayerDate(track.date);
-        setPlayerVenue(track.venue || '');
         const newHowl = new howler_1.Howl({
             autoplay: true,
             html5: true,
@@ -122,11 +124,20 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
         const handleHashChange = () => setPathParts((0, getPathParts_1.default)(location.hash));
         handleHashChange();
         addEventListener("hashchange", handleHashChange);
+        return () => {
+            removeEventListener("hashchange", handleHashChange);
+        };
+    }, [location.hash]);
+    (0, react_1.useEffect)(() => {
         const handleKeydown = (e) => {
             var _a, _b;
-            if (((_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.tagName) === "A" ||
-                ((_b = document.activeElement) === null || _b === void 0 ? void 0 : _b.tagName) === "BUTTON") {
+            if (((_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.tagName) === "A") {
                 return;
+            }
+            if (((_b = document.activeElement) === null || _b === void 0 ? void 0 : _b.tagName) === "BUTTON") {
+                if (!document.activeElement.classList.contains("fsa-list-item-track")) {
+                    return;
+                }
             }
             if (e.code === 'Space' && !!howl) {
                 togglePausePlay();
@@ -134,23 +145,35 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
         };
         addEventListener('keydown', handleKeydown);
         return () => {
-            removeEventListener("hashchange", handleHashChange);
             removeEventListener('keydown', handleKeydown);
         };
-    }, [howl, location.hash]);
+    }, [howl, isPlaying]);
     (0, react_1.useEffect)(() => {
         if (yearsDirectory && !pathParts.year && !pathParts.date) {
             setListItems((0, getYearsListFromTracks_1.default)(baseHref, data));
         }
         else if ((!yearsDirectory || pathParts.year) && !pathParts.date) {
-            setListItems((0, getDateAndVenueListFromTracks_1.default)(baseHref, yearsDirectory, pathParts.year || "", data));
+            const listItems = (0, getDateAndVenueListFromTracks_1.default)(baseHref, yearsDirectory, pathParts.year || "", data);
+            setListItems(listItems);
         }
         else if (pathParts.date) {
             const tracklist = (0, getTrackListFromTracks_1.default)(baseHref, yearsDirectory, pathParts.date, data);
             setListItems(tracklist);
             (0, getDurationsForTracks_1.default)(tracklist).then(setListItems);
+            const listItemWithVenue = tracklist.find(i => i.venue);
+            setVenue(listItemWithVenue && listItemWithVenue.venue ? listItemWithVenue.venue : '');
         }
     }, [baseHref, pathParts]);
+    (0, react_1.useEffect)(() => {
+        let newTitle = pathParts.date || (yearsDirectory && pathParts.year);
+        if (newTitle && venue) {
+            newTitle = `${newTitle} @ ${venue}`;
+        }
+        if (!newTitle) {
+            newTitle = titleFromProps;
+        }
+        setTitle(newTitle);
+    }, [pathParts, yearsDirectory, venue]);
     (0, react_1.useEffect)(() => {
         if (typeof userScrubPercent === "number") {
             if (scrubberElapsedRef.current) {
@@ -195,7 +218,9 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
             howl === null || howl === void 0 ? void 0 : howl.seek(0);
         }
         else if ((_a = listItems[currentTrackListItemIndex - 1]) === null || _a === void 0 ? void 0 : _a.isTrack) {
-            setCurrentTrackListItemIndex(currentTrackListItemIndex - 1);
+            const newIndex = currentTrackListItemIndex - 1;
+            setCurrentTrackListItemIndex(newIndex);
+            selectTrack(listItems[newIndex]);
         }
     }
     function onNextClick() {
@@ -204,32 +229,30 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
             currentTrackListItemIndex < listItems.length - 1 &&
             currentTrackListItemIndex + 1 &&
             ((_a = listItems[currentTrackListItemIndex + 1]) === null || _a === void 0 ? void 0 : _a.isTrack)) {
-            setCurrentTrackListItemIndex(currentTrackListItemIndex + 1);
+            const newIndex = currentTrackListItemIndex + 1;
+            setCurrentTrackListItemIndex(newIndex);
+            selectTrack(listItems[newIndex]);
         }
     }
-    (0, react_1.useEffect)(() => {
-        if (typeof currentTrackListItemIndex === "number") {
-            selectTrack(currentTrackListItemIndex);
-        }
-    }, [currentTrackListItemIndex]);
-    function onListItemClick(listItemIndex, listItem) {
-        if (listItem.isTrack) {
-            setCurrentTrackListItemIndex(listItemIndex);
-        }
+    function onListItemClick(listItemIndex) {
+        setCurrentTrackListItemIndex(listItemIndex);
+        selectTrack(listItems[listItemIndex]);
     }
     return (react_1.default.createElement("div", { className: `fsa-container ${!howl && "fsa-container--player-hidden"}` },
         react_1.default.createElement("header", null,
             react_1.default.createElement("button", { onClick: goBack }, "\u00AB"),
             react_1.default.createElement("h1", null, title)),
         react_1.default.createElement("ul", { className: "fsa-list" }, listItems.map((i, listItemIndex) => (react_1.default.createElement("li", { className: "fsa-list-item", key: `${i.date}${i.venue}${i.year}${i.name}` },
-            react_1.default.createElement("a", { href: i.href, onClick: () => onListItemClick(listItemIndex, i) },
+            i.isTrack && (react_1.default.createElement("button", { className: "fsa-list-item-track", onClick: () => onListItemClick(listItemIndex) },
                 react_1.default.createElement("div", { className: "fsa-list-item-left" },
-                    i.name && react_1.default.createElement("span", { className: "fsa-list-item-name" }, i.name),
-                    !i.name && react_1.default.createElement("span", { className: "fsa-list-item-name" },
+                    react_1.default.createElement("span", { className: "fsa-list-item-name" }, i.name)),
+                react_1.default.createElement("div", { className: "fsa-list-item-duration" }, i.duration))),
+            !i.isTrack && (react_1.default.createElement("a", { href: i.href },
+                react_1.default.createElement("div", { className: "fsa-list-item-left" },
+                    react_1.default.createElement("span", { className: "fsa-list-item-name" },
                         i.date,
                         i.venue && ` @ ${i.venue}`,
-                        i.year)),
-                react_1.default.createElement("div", { className: "fsa-list-item-duration" }, i.duration)))))),
+                        i.year)))))))),
         react_1.default.createElement("div", { className: "fsa-player" },
             react_1.default.createElement("div", { className: "fsa-player-buttons" },
                 react_1.default.createElement("button", { className: "fsa-player-button fsa-player-button-prev", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: onPrevClick },
@@ -248,7 +271,7 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
                     react_1.default.createElement("div", null,
                         react_1.default.createElement("span", { className: "fsa-player-title" }, playerTitle),
                         react_1.default.createElement("span", { className: "fsa-player-date" }, playerDate),
-                        react_1.default.createElement("span", { className: "fsa-player-venue" }, playerVenue)),
+                        react_1.default.createElement("span", { className: "fsa-player-venue" }, venue)),
                     react_1.default.createElement("div", { className: "fsa-player-time" },
                         elapsed ? (0, millisecondsToMinutesAndSeconds_1.default)(elapsed * 1000) : "--:--",
                         " / ",

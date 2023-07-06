@@ -1,3 +1,5 @@
+import sortByKey from "./sortByKey";
+
 export default function (baseHref: string, tracks: FSS.Track[]): { year: string }[] {
   const years = new Set<string>()
 
@@ -6,5 +8,8 @@ export default function (baseHref: string, tracks: FSS.Track[]): { year: string 
     years.add(year.toString());
   });
 
-  return [...years].map((year) => ({ href: `${baseHref}#/${year}`, year }))
+  return sortByKey(
+      "year",
+      [...years].map((year) => ({ href: `${baseHref}#/${year}`, year }))
+    )
 }

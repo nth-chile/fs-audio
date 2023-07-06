@@ -63,10 +63,11 @@
       }
     }
   
-    a {
+    a, button {
       padding: 30px;
       display: flex;
       justify-content: space-between;
+      width: 100%;
     }
   }
 

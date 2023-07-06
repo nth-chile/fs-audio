@@ -1,8 +1,8 @@
 /** Possible paths:
- * basePath
- * basePath/YYYY
- * basePath/YYYY-MM-DD
- * basePath/YYY-MM-DD-track-slug
+ * basePath#
+ * basePath#/YYYY
+ * basePath#/YYYY-MM-DD
+ * // basePath#/YYY-MM-DD-track-slug
  */
 
 export type PathParts = {

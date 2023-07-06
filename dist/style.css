@@ -68,10 +68,11 @@
           color: #84ff16;
         }
 
-.fsa-container .fsa-list a {
+.fsa-container .fsa-list a, .fsa-container .fsa-list button {
       padding: 30px;
       display: flex;
       justify-content: space-between;
+      width: 100%;
     }
 
 .fsa-container .fsa-list-item-left {

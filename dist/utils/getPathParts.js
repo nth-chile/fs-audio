@@ -1,9 +1,9 @@
 "use strict";
 /** Possible paths:
- * basePath
- * basePath/YYYY
- * basePath/YYYY-MM-DD
- * basePath/YYY-MM-DD-track-slug
+ * basePath#
+ * basePath#/YYYY
+ * basePath#/YYYY-MM-DD
+ * // basePath#/YYY-MM-DD-track-slug
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 function default_1(path) {

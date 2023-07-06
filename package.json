@@ -8,13 +8,11 @@
   "volta": {
     "node": "18.16.1"
   },
-  "exports": {
-    ".": "./dist/index.js",
-    "./fs-audio-internet-archive": "./dist/fs-audio-internet-archive/index.js"
-  },
   "devDependencies": {
+    "@types/howler": "^2.2.7",
     "@types/node": "^20.3.2",
     "@types/react": "^18.2.14",
+    "@types/qs": "^6.9.7",
     "@types/react-dom": "^18.2.6",
     "autoprefixer": "^10.4.14",
     "cssnano": "^6.0.1",
@@ -27,8 +25,6 @@
     "typescript": "^5.1.5"
   },
   "dependencies": {
-    "@types/howler": "^2.2.7",
-    "@types/qs": "^6.9.7",
     "howler": "^2.2.3",
     "qs": "^6.11.2",
     "react": "^18.2.0",
