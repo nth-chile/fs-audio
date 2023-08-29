@@ -1,5 +1,5 @@
 namespace FSS {
-  export type Track = {
+  type Track = {
     date: string;
     duration?: string;
     name: string;

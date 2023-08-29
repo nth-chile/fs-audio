@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, ReactNode, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import getYearsListFromTracks from "./utils/getYearsListFromTracks";
 import getDateAndVenueListFromTracks from "./utils/getDateAndVenueListFromTracks";
 import getTrackListFromTracks from "./utils/getTrackListFromTracks";
@@ -30,7 +30,8 @@ import getDurationsForTracks from "./utils/getDurationsForTracks";
 //   }
 // },
 
-type PlayerProps = {
+export type PlayerProps = {
+  backPath: string;
   basePath: string;
   data: FSS.Track[];
   title: string;
@@ -38,7 +39,7 @@ type PlayerProps = {
 }
 
 export default function Player({
-  data, title: titleFromProps, basePath, yearsDirectory = true
+  data, title: titleFromProps, basePath, backPath, yearsDirectory = true
 }: PlayerProps) {
   const [pathParts, setPathParts] = useState<PathParts>({})
   const baseHref = ensureLeadingSlashOnly(basePath)
@@ -125,20 +126,23 @@ export default function Player({
     } else if (pathParts.year) {
       // Remove /#/year from end of hash
       hash = hash.replace(new RegExp(`#\/${pathParts.year}$`), '')
+    } else if (hash === "" && backPath) {
+      // Navigate out of the player, if backPath is provided
+      return window.location.pathname = ensureLeadingSlashOnly(backPath)
     }
     
-    location.hash = hash
+    window.location.hash = hash
   }
 
   useEffect(() => {
-    const handleHashChange = () => setPathParts(getPathParts(location.hash))
+    const handleHashChange = () => setPathParts(getPathParts(window.location.hash))
     handleHashChange()
     addEventListener("hashchange", handleHashChange)
 
     return () => {
       removeEventListener("hashchange", handleHashChange)
     }
-  }, [location.hash])
+  }, [window.location.hash])
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {

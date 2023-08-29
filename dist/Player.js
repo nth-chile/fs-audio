@@ -36,7 +36,7 @@ const getPathParts_1 = __importDefault(require("./utils/getPathParts"));
 const howler_1 = require("howler");
 const millisecondsToMinutesAndSeconds_1 = __importDefault(require("./utils/millisecondsToMinutesAndSeconds"));
 const getDurationsForTracks_1 = __importDefault(require("./utils/getDurationsForTracks"));
-function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }) {
+function Player({ data, title: titleFromProps, basePath, backPath, yearsDirectory = true }) {
     const [pathParts, setPathParts] = (0, react_1.useState)({});
     const baseHref = (0, ensureLeadingSlashOnly_1.default)(basePath);
     const [title, setTitle] = (0, react_1.useState)(titleFromProps);
@@ -118,16 +118,20 @@ function Player({ data, title: titleFromProps, basePath, yearsDirectory = true }
             // Remove /#/year from end of hash
             hash = hash.replace(new RegExp(`#\/${pathParts.year}$`), '');
         }
-        location.hash = hash;
+        else if (hash === "" && backPath) {
+            // Navigate out of the player, if backPath is provided
+            return window.location.pathname = (0, ensureLeadingSlashOnly_1.default)(backPath);
+        }
+        window.location.hash = hash;
     }
     (0, react_1.useEffect)(() => {
-        const handleHashChange = () => setPathParts((0, getPathParts_1.default)(location.hash));
+        const handleHashChange = () => setPathParts((0, getPathParts_1.default)(window.location.hash));
         handleHashChange();
         addEventListener("hashchange", handleHashChange);
         return () => {
             removeEventListener("hashchange", handleHashChange);
         };
-    }, [location.hash]);
+    }, [window.location.hash]);
     (0, react_1.useEffect)(() => {
         const handleKeydown = (e) => {
             var _a, _b;
