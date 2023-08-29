@@ -1,1 +1,1 @@
-export default function <T>(key: keyof T, arr: T[]): T[];
+export default function <T>(key: keyof T, arr: T[], asc?: boolean): T[];

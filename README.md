@@ -12,8 +12,8 @@ The "fs" in "fs-shows" stands for filesystem. That's because the React app is bu
 ## Filename format
 
 - `date` (required): YYYY-MM-DD
-- `name` (required): name of track, hyphenated
 - `trackNumber` (optional): two-digit number
+- `name` (required): name of track, hyphenated
 - `venue` (optional): name of venue, hyphenated
 
 Format for filename is `{date}-{trackNumber}-{name}@{venue}`
