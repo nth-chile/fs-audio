@@ -54,7 +54,6 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     const playbackInterval = (0, react_1.useRef)(null);
     const scrubberRef = (0, react_1.useRef)(null);
     const scrubberElapsedRef = (0, react_1.useRef)(null);
-    const [test, setTest] = (0, react_1.useState)(false);
     function selectTrack(track) {
         // @ts-ignore
         if (howl && howl._src === track.src) {
@@ -76,7 +75,6 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
                 setDuration(newHowl.duration());
             },
             onend() {
-                setTest(true);
                 setIsPlaying(false);
                 clearInterval(playbackInterval.current);
                 onNextClick();
