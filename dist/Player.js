@@ -45,15 +45,16 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     const [elapsed, setElapsed] = (0, react_1.useState)(null);
     const [userScrubPercent, setUserScrubPercent] = (0, react_1.useState)(null);
     const [duration, setDuration] = (0, react_1.useState)(null);
-    // This is the index of element in listItems, not of props.data
-    const [currentTrackListItemIndex, setCurrentTrackListItemIndex] = (0, react_1.useState)(null);
     const [playerTitle, setPlayerTitle] = (0, react_1.useState)('');
     const [playerDate, setPlayerDate] = (0, react_1.useState)('');
     const [venue, setVenue] = (0, react_1.useState)('');
     const [isPlaying, setIsPlaying] = (0, react_1.useState)(false);
+    // This is the index of element in listItems, not of props.data
+    const currentTrackListItemIndex = (0, react_1.useRef)(null);
     const playbackInterval = (0, react_1.useRef)(null);
     const scrubberRef = (0, react_1.useRef)(null);
     const scrubberElapsedRef = (0, react_1.useRef)(null);
+    const [test, setTest] = (0, react_1.useState)(false);
     function selectTrack(track) {
         // @ts-ignore
         if (howl && howl._src === track.src) {
@@ -75,6 +76,7 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
                 setDuration(newHowl.duration());
             },
             onend() {
+                setTest(true);
                 setIsPlaying(false);
                 clearInterval(playbackInterval.current);
                 onNextClick();
@@ -215,31 +217,31 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     }
     function onPrevClick() {
         var _a;
-        if (typeof currentTrackListItemIndex !== "number") {
+        if (typeof currentTrackListItemIndex.current !== "number") {
             return;
         }
-        if (currentTrackListItemIndex === 0 && isPlaying) {
+        if (currentTrackListItemIndex.current === 0 && isPlaying) {
             howl === null || howl === void 0 ? void 0 : howl.seek(0);
         }
-        else if ((_a = listItems[currentTrackListItemIndex - 1]) === null || _a === void 0 ? void 0 : _a.isTrack) {
-            const newIndex = currentTrackListItemIndex - 1;
-            setCurrentTrackListItemIndex(newIndex);
+        else if ((_a = listItems[currentTrackListItemIndex.current - 1]) === null || _a === void 0 ? void 0 : _a.isTrack) {
+            const newIndex = currentTrackListItemIndex.current - 1;
+            currentTrackListItemIndex.current = newIndex;
             selectTrack(listItems[newIndex]);
         }
     }
     function onNextClick() {
         var _a;
-        if (typeof currentTrackListItemIndex === "number" &&
-            currentTrackListItemIndex < listItems.length - 1 &&
-            currentTrackListItemIndex + 1 &&
-            ((_a = listItems[currentTrackListItemIndex + 1]) === null || _a === void 0 ? void 0 : _a.isTrack)) {
-            const newIndex = currentTrackListItemIndex + 1;
-            setCurrentTrackListItemIndex(newIndex);
+        if (typeof currentTrackListItemIndex.current === "number" &&
+            currentTrackListItemIndex.current < listItems.length - 1 &&
+            currentTrackListItemIndex.current + 1 &&
+            ((_a = listItems[currentTrackListItemIndex.current + 1]) === null || _a === void 0 ? void 0 : _a.isTrack)) {
+            const newIndex = currentTrackListItemIndex.current + 1;
+            currentTrackListItemIndex.current = newIndex;
             selectTrack(listItems[newIndex]);
         }
     }
     function onListItemClick(listItemIndex) {
-        setCurrentTrackListItemIndex(listItemIndex);
+        currentTrackListItemIndex.current = listItemIndex;
         selectTrack(listItems[listItemIndex]);
     }
     return (react_1.default.createElement("div", { className: `fsa-container ${!howl && "fsa-container--player-hidden"}` },

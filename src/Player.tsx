@@ -49,12 +49,12 @@ export default function Player({
   const [elapsed, setElapsed] = useState<number | null>(null)
   const [userScrubPercent, setUserScrubPercent] = useState<number | null>(null)
   const [duration, setDuration] = useState<number | null>(null)
-  // This is the index of element in listItems, not of props.data
-  const [currentTrackListItemIndex, setCurrentTrackListItemIndex]= useState<number | null>(null)
   const [playerTitle, setPlayerTitle] = useState('')
   const [playerDate, setPlayerDate] = useState('')
   const [venue, setVenue] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
+  // This is the index of element in listItems, not of props.data
+  const currentTrackListItemIndex = useRef<number | null>(null)
   const playbackInterval = useRef<any>(null)
   const scrubberRef = useRef<HTMLDivElement>(null)
   const scrubberElapsedRef = useRef<HTMLDivElement>(null)
@@ -241,34 +241,34 @@ export default function Player({
   }
 
   function onPrevClick () {
-    if (typeof currentTrackListItemIndex !== "number") {
+    if (typeof currentTrackListItemIndex.current !== "number") {
       return
     }
 
-    if (currentTrackListItemIndex === 0 && isPlaying) {
+    if (currentTrackListItemIndex.current === 0 && isPlaying) {
       howl?.seek(0)
-    } else if (listItems[currentTrackListItemIndex - 1]?.isTrack) {
-      const newIndex = currentTrackListItemIndex - 1
-      setCurrentTrackListItemIndex(newIndex)
+    } else if (listItems[currentTrackListItemIndex.current - 1]?.isTrack) {
+      const newIndex = currentTrackListItemIndex.current - 1
+      currentTrackListItemIndex.current = newIndex
       selectTrack(listItems[newIndex])
     }
   }
 
-  function onNextClick () {
+  function onNextClick() {
     if (
-      typeof currentTrackListItemIndex === "number" && 
-      currentTrackListItemIndex < listItems.length - 1 &&
-      currentTrackListItemIndex + 1 &&
-      listItems[currentTrackListItemIndex + 1]?.isTrack
+      typeof currentTrackListItemIndex.current === "number" && 
+      currentTrackListItemIndex.current < listItems.length - 1 &&
+      currentTrackListItemIndex.current + 1 &&
+      listItems[currentTrackListItemIndex.current + 1]?.isTrack
     ) {
-      const newIndex = currentTrackListItemIndex + 1
-      setCurrentTrackListItemIndex(newIndex)
+      const newIndex = currentTrackListItemIndex.current + 1
+      currentTrackListItemIndex.current = newIndex
       selectTrack(listItems[newIndex])
     }
   }
 
   function onListItemClick (listItemIndex: number) {
-    setCurrentTrackListItemIndex(listItemIndex)
+    currentTrackListItemIndex.current = listItemIndex
     selectTrack(listItems[listItemIndex])
   }
 
