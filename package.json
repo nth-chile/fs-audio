@@ -5,6 +5,9 @@
   },
   "author": "Jared Salzano",
   "license": "MIT",
+  "main": ".",
+  "name": "fs-shows",
+  "version": "1.0.0",
   "volta": {
     "node": "18.16.1"
   },
