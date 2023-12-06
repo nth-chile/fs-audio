@@ -13,8 +13,8 @@ function default_1(filename) {
     return {
         date,
         trackNumber,
-        name: name.replace(/\.[^.]+$/, '').replace(/-/g, ' '),
-        venue: venue && venue.replace(/-/g, ' ')
+        name: name.replace(/_/g, ' '),
+        venue: venue && venue.replace(/_/g, ' ')
     };
 }
 exports.default = default_1;

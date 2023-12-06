@@ -10,11 +10,11 @@ export default function (filename: string) {
   }
 
   const [, date, trackNumber, name, venue] = match;
-  
+
   return {
     date,
     trackNumber,
-    name: name.replace(/\.[^.]+$/, '').replace(/-/g, ' '), 
-    venue: venue && venue.replace(/-/g, ' ')
+    name: name.replace(/_/g, ' '), 
+    venue: venue && venue.replace(/_/g, ' ')
   };
 }
