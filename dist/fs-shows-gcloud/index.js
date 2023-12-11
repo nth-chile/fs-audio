@@ -18,7 +18,17 @@ function default_1(bucketName) {
     return __awaiter(this, void 0, void 0, function* () {
         const req = yield fetch(`https://www.googleapis.com/storage/v1/b/${bucketName}/o`);
         const result = yield req.json();
-        return result.items.map((i) => (Object.assign(Object.assign({}, (0, getFilenameParts_1.default)(i.name)), { src: i.mediaLink })))
+        return result.items
+            .filter((i) => i.contentType === "audio/mpeg")
+            .map((i) => {
+            // Select the filename, ignoring any path before it
+            let name = i.name;
+            const lastSlashIndex = name.lastIndexOf("/");
+            if (lastSlashIndex !== -1) {
+                name = name.substring(lastSlashIndex + 1);
+            }
+            return Object.assign(Object.assign({}, (0, getFilenameParts_1.default)(name)), { src: i.mediaLink });
+        })
             .sort((a, b) => b.name.localeCompare(a.name));
     });
 }

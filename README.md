@@ -11,22 +11,21 @@ The "fs" in "fs-shows" stands for filesystem. That's because the React app is bu
 
 ## Filename format
 
-- `date` (required): YYYY-MM-DD
-- `trackNumber` (optional): two-digit number
-- `name` (required): name of track, using underscores for spaces
-- `venue` (optional): name of venue, using underscores for spaces
+_Note: it's the [getter](#getters)'s job to implement this spec_
 
-Format for filename is `{date}-{trackNumber}-{name}@{venue}`
+- Format for filename is `{date}-{trackNumber}-{name}@{venue}`
+  - `date` (required): YYYY-MM-DD
+  - `trackNumber` (optional): two-digit number
+  - `name` (required): name of track, using underscores for spaces
+  - `venue` (optional): name of venue, using underscores for spaces
+- Forward slashes in filenames should be URL encoded to `%2F`
+- You can use folders however you want. The getters should find all files in the parent location
+
+### Example
+
+`any/path/to/2024-10-14-07-Drums%2FSpace@Connolly's_Pub.mp3`
+
 
 ## Getters
 
 Each storage provider has its own API for fetching the files, so a different getter function is required for each storage provider. Getters must return `Promise<FSS.Track[]>`.
-
-Technically, getters can decide to not require the filename format, and get their data in some other way. But let's not. Storage services and our opinions about them change but my filenames won't!
-
-
-## Future
-
-- Use a React hook that provides app state to separate logic from UI
-- Move data getters to separate packages
-- Would it be useful to have an option for page URLs that don't look like breadcrumbs? Or the ability to copy share links like that? For sharing only one subtree
