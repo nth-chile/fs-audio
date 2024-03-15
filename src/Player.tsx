@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react";
 import getYearsListFromTracks from "./utils/getYearsListFromTracks";
 import getDateAndVenueListFromTracks from "./utils/getDateAndVenueListFromTracks";
 import getTrackListFromTracks from "./utils/getTrackListFromTracks";
-import ensureLeadingSlashOnly from "./utils/ensureLeadingSlashOnly"
+import ensureLeadingSlashOnly from "./utils/ensureLeadingSlashOnly";
 import getPathParts, { PathParts } from "./utils/getPathParts";
-import { Howl } from "howler"
-import millisecondsToMinutesAndSeconds from "./utils/millisecondsToMinutesAndSeconds"
+import { Howl } from "howler";
+import millisecondsToMinutesAndSeconds from "./utils/millisecondsToMinutesAndSeconds";
 import getDurationsForTracks from "./utils/getDurationsForTracks";
 
 //   this.progressWidth =
@@ -36,253 +36,290 @@ export type PlayerProps = {
   data: FSS.Track[];
   title: string;
   yearsDirectory?: boolean;
-}
+};
 
 export default function Player({
-  data, title: titleFromProps, basePath, backPath, yearsDirectory = true
+  data,
+  title: titleFromProps,
+  basePath,
+  backPath,
+  yearsDirectory = true,
 }: PlayerProps) {
-  const [pathParts, setPathParts] = useState<PathParts>({})
-  const baseHref = ensureLeadingSlashOnly(basePath)
-  const [title, setTitle] = useState(titleFromProps)
-  const [listItems, setListItems] = useState<any[]>([])
-  const [howl, setHowl] = useState<Howl | null>(null)
-  const [elapsed, setElapsed] = useState<number | null>(null)
-  const [userScrubPercent, setUserScrubPercent] = useState<number | null>(null)
-  const [duration, setDuration] = useState<number | null>(null)
-  const [playerTitle, setPlayerTitle] = useState('')
-  const [playerDate, setPlayerDate] = useState('')
-  const [venue, setVenue] = useState('')
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [pathParts, setPathParts] = useState<PathParts>({});
+  const baseHref = ensureLeadingSlashOnly(basePath);
+  const [title, setTitle] = useState(titleFromProps);
+  const [listItems, setListItems] = useState<any[]>([]);
+  const [howl, setHowl] = useState<Howl | null>(null);
+  const [elapsed, setElapsed] = useState<number | null>(null);
+  const [userScrubPercent, setUserScrubPercent] = useState<number | null>(null);
+  const [duration, setDuration] = useState<number | null>(null);
+  const [playerTitle, setPlayerTitle] = useState("");
+  const [playerDate, setPlayerDate] = useState("");
+  const [venue, setVenue] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
   // This is the index of element in listItems, not of props.data
-  const currentTrackListItemIndex = useRef<number | null>(null)
-  const playbackInterval = useRef<any>(null)
-  const scrubberRef = useRef<HTMLDivElement>(null)
-  const scrubberElapsedRef = useRef<HTMLDivElement>(null)
+  const currentTrackListItemIndex = useRef<number | null>(null);
+  const playbackInterval = useRef<any>(null);
+  const scrubberRef = useRef<HTMLDivElement>(null);
+  const scrubberElapsedRef = useRef<HTMLDivElement>(null);
 
   function selectTrack(track: FSS.Track) {
     // @ts-ignore
     if (howl && howl._src === track.src) {
-      return
+      return;
     }
 
     if (howl) {
-      clearInterval(playbackInterval.current)
-      howl.unload()
-      setHowl(null)
+      clearInterval(playbackInterval.current);
+      howl.unload();
+      setHowl(null);
     }
 
-    setElapsed(null)
-    setDuration(null)
-    setPlayerTitle(track.name)
-    setPlayerDate(track.date)
-    
+    setElapsed(null);
+    setDuration(null);
+    setPlayerTitle(track.name);
+    setPlayerDate(track.date);
+
     const newHowl = new Howl({
       autoplay: true,
       html5: true,
       onload() {
-        setDuration(newHowl.duration())
+        setDuration(newHowl.duration());
       },
       onend() {
-        setIsPlaying(false)
-        clearInterval(playbackInterval.current)
-        onNextClick()
+        setIsPlaying(false);
+        clearInterval(playbackInterval.current);
+        onNextClick();
       },
       onpause() {
-        setIsPlaying(false)
-        clearInterval(playbackInterval.current)
+        setIsPlaying(false);
+        clearInterval(playbackInterval.current);
       },
       onplay() {
-        setIsPlaying(true)
-        const setElapsedTime = () => setElapsed(newHowl.seek())
-        setElapsedTime()
+        setIsPlaying(true);
+        const setElapsedTime = () => setElapsed(newHowl.seek());
+        setElapsedTime();
         playbackInterval.current = setInterval(setElapsedTime, 900);
       },
-      src: track.src
-    })
+      src: track.src,
+    });
 
-    setHowl(newHowl)
+    setHowl(newHowl);
   }
 
   function togglePausePlay() {
-    if (!howl) return
+    if (!howl) return;
 
     if (howl.playing()) {
-      howl.pause()
+      howl.pause();
     } else {
-      howl.play()
+      howl.play();
     }
   }
 
   function goBack() {
     // URL without trailing slases
-    let hash = window.location.hash.replace(/\/$/, '')
+    let hash = window.location.hash.replace(/\/$/, "");
 
     if (pathParts.trackSlug) {
       // Remove /trackSlug from end of hash
-      hash = hash.replace(new RegExp(`\/${pathParts.trackSlug}$`), '')
+      hash = hash.replace(new RegExp(`\/${pathParts.trackSlug}$`), "");
     } else if (pathParts.date) {
       // Replace date with year from end of hash
-      hash = hash.replace(new RegExp(`${pathParts.date}$`), pathParts.year || '')
+      hash = hash.replace(
+        new RegExp(`${pathParts.date}$`),
+        pathParts.year || ""
+      );
     } else if (pathParts.year) {
       // Remove /#/year from end of hash
-      hash = hash.replace(new RegExp(`#\/${pathParts.year}$`), '')
+      hash = hash.replace(new RegExp(`#\/${pathParts.year}$`), "");
     } else if (hash === "" && backPath) {
       // Navigate out of the player, if backPath is provided
-      return window.location.pathname = ensureLeadingSlashOnly(backPath)
+      return (window.location.pathname = ensureLeadingSlashOnly(backPath));
     }
-    
-    window.location.hash = hash
+
+    window.location.hash = hash;
   }
 
   useEffect(() => {
-    const handleHashChange = () => setPathParts(getPathParts(window.location.hash))
-    handleHashChange()
-    addEventListener("hashchange", handleHashChange)
+    const handleHashChange = () =>
+      setPathParts(getPathParts(window.location.hash));
+    handleHashChange();
+    addEventListener("hashchange", handleHashChange);
 
     return () => {
-      removeEventListener("hashchange", handleHashChange)
-    }
-  }, [window.location.hash])
+      removeEventListener("hashchange", handleHashChange);
+    };
+  }, [window.location.hash]);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (document.activeElement?.tagName === "A") {
-        return
+        return;
       }
 
       if (document.activeElement?.tagName === "BUTTON") {
         if (!document.activeElement.classList.contains("fsa-list-item-track")) {
-          return
+          return;
         }
       }
 
-      if (e.code === 'Space' && !!howl) {
-        togglePausePlay()
+      if (e.code === "Space" && !!howl) {
+        togglePausePlay();
       }
-    }
+    };
 
-    addEventListener('keydown', handleKeydown)
+    addEventListener("keydown", handleKeydown);
 
     return () => {
-      removeEventListener('keydown', handleKeydown)
-    }
-  }, [howl, isPlaying])
+      removeEventListener("keydown", handleKeydown);
+    };
+  }, [howl, isPlaying]);
 
   useEffect(() => {
     if (yearsDirectory && !pathParts.year && !pathParts.date) {
-      setListItems(getYearsListFromTracks(baseHref, data))
+      setListItems(getYearsListFromTracks(baseHref, data));
     } else if ((!yearsDirectory || pathParts.year) && !pathParts.date) {
-      const listItems = getDateAndVenueListFromTracks(baseHref, yearsDirectory, pathParts.year || "", data)
-      setListItems(listItems)
+      const listItems = getDateAndVenueListFromTracks(
+        baseHref,
+        yearsDirectory,
+        pathParts.year || "",
+        data
+      );
+      setListItems(listItems);
     } else if (pathParts.date) {
-      const tracklist = getTrackListFromTracks(baseHref, yearsDirectory, pathParts.date, data)
-      setListItems(tracklist)
+      const tracklist = getTrackListFromTracks(
+        baseHref,
+        yearsDirectory,
+        pathParts.date,
+        data
+      );
+      setListItems(tracklist);
       getDurationsForTracks(tracklist).then(setListItems);
-      
-      const listItemWithVenue = tracklist.find(i => i.venue)
-      setVenue(listItemWithVenue && listItemWithVenue.venue ? listItemWithVenue.venue : '')
+
+      const listItemWithVenue = tracklist.find((i) => i.venue);
+      setVenue(
+        listItemWithVenue && listItemWithVenue.venue
+          ? listItemWithVenue.venue
+          : ""
+      );
     }
-  }, [baseHref, pathParts])
+  }, [baseHref, pathParts]);
 
   useEffect(() => {
-    let newTitle = pathParts.date || (yearsDirectory && pathParts.year)
+    let newTitle = pathParts.date || (yearsDirectory && pathParts.year);
 
     if (newTitle && venue) {
-      newTitle = `${newTitle} @ ${venue}`
-    }
-    
-    if (!newTitle) {
-      newTitle = titleFromProps
+      newTitle = `${newTitle} @ ${venue}`;
     }
 
-    setTitle(newTitle)
-  }, [pathParts, yearsDirectory, venue])
+    if (!newTitle) {
+      newTitle = titleFromProps;
+    }
+
+    setTitle(newTitle);
+  }, [pathParts, yearsDirectory, venue]);
 
   useEffect(() => {
     if (typeof userScrubPercent === "number") {
       if (scrubberElapsedRef.current) {
         scrubberElapsedRef.current.style.width = userScrubPercent + "%";
       }
-  
+
       if (howl) {
-        setElapsed((userScrubPercent / 100) * howl.duration())
-        howl.seek((userScrubPercent / 100) * howl.duration())
+        setElapsed((userScrubPercent / 100) * howl.duration());
+        howl.seek((userScrubPercent / 100) * howl.duration());
       }
     }
-  }, [userScrubPercent])
+  }, [userScrubPercent]);
 
   useEffect(() => {
     if (scrubberElapsedRef.current && elapsed && duration) {
       scrubberElapsedRef.current.style.width = (elapsed / duration) * 100 + "%";
     }
-  }, [elapsed, duration])
+  }, [elapsed, duration]);
 
-  function onBtnMouseDown (e: React.MouseEvent<HTMLButtonElement>) {
+  function onBtnMouseDown(e: React.MouseEvent<HTMLButtonElement>) {
     if (e.target instanceof HTMLElement) {
-      e.target.classList.add("fsa-player-button--pressed")
+      e.target.classList.add("fsa-player-button--pressed");
     }
   }
 
-  function onBtnMouseUp (e: React.MouseEvent<HTMLButtonElement>) {
+  function onBtnMouseUp(e: React.MouseEvent<HTMLButtonElement>) {
     if (e.target instanceof HTMLElement) {
-      e.target.classList.remove("fsa-player-button--pressed")
+      e.target.classList.remove("fsa-player-button--pressed");
     }
   }
 
-  function onScrubberMousedown (e: React.MouseEvent<HTMLDivElement>) {
+  function onScrubberMousedown(e: React.MouseEvent<HTMLDivElement>) {
     const zeroPos = scrubberRef.current?.getBoundingClientRect().left;
     const total = scrubberRef.current?.getBoundingClientRect().width;
 
     if (!zeroPos || !total) {
-      return
+      return;
     }
 
-    setUserScrubPercent(((e.clientX - zeroPos) / total) * 100)
+    setUserScrubPercent(((e.clientX - zeroPos) / total) * 100);
   }
 
-  function onPrevClick () {
+  function onPrevClick() {
     if (typeof currentTrackListItemIndex.current !== "number") {
-      return
+      return;
     }
 
     if (currentTrackListItemIndex.current === 0 && isPlaying) {
-      howl?.seek(0)
+      howl?.seek(0);
     } else if (listItems[currentTrackListItemIndex.current - 1]?.isTrack) {
-      const newIndex = currentTrackListItemIndex.current - 1
-      currentTrackListItemIndex.current = newIndex
-      selectTrack(listItems[newIndex])
+      const newIndex = currentTrackListItemIndex.current - 1;
+      currentTrackListItemIndex.current = newIndex;
+      selectTrack(listItems[newIndex]);
     }
   }
 
   function onNextClick() {
     if (
-      typeof currentTrackListItemIndex.current === "number" && 
+      typeof currentTrackListItemIndex.current === "number" &&
       currentTrackListItemIndex.current < listItems.length - 1 &&
       currentTrackListItemIndex.current + 1 &&
       listItems[currentTrackListItemIndex.current + 1]?.isTrack
     ) {
-      const newIndex = currentTrackListItemIndex.current + 1
-      currentTrackListItemIndex.current = newIndex
-      selectTrack(listItems[newIndex])
+      const newIndex = currentTrackListItemIndex.current + 1;
+      currentTrackListItemIndex.current = newIndex;
+      selectTrack(listItems[newIndex]);
     }
   }
 
-  function onListItemClick (listItemIndex: number) {
-    currentTrackListItemIndex.current = listItemIndex
-    selectTrack(listItems[listItemIndex])
+  function onListItemClick(listItemIndex: number) {
+    currentTrackListItemIndex.current = listItemIndex;
+    selectTrack(listItems[listItemIndex]);
   }
 
   return (
     <div className={`fsa-container ${!howl && "fsa-container--player-hidden"}`}>
       <header>
-        <button onClick={goBack}>«</button>
+        <button onClick={goBack}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            viewBox="-78.5 0 512 512"
+          >
+            <path fill="currentColor" d="m257 64 34 34-163 164 163 164-34 34L61 262 257 64Z" />
+          </svg>
+        </button>
         <h1>{title}</h1>
       </header>
       <ul className="fsa-list">
         {listItems.map((i, listItemIndex) => (
-          <li className="fsa-list-item" key={`${i.date}${i.venue}${i.year}${i.name}`}>
+          <li
+            className="fsa-list-item"
+            key={`${i.date}${i.venue}${i.year}${i.name}`}
+          >
             {i.isTrack && (
-              <button className="fsa-list-item-track" onClick={() => onListItemClick(listItemIndex)}>
+              <button
+                className="fsa-list-item-track"
+                onClick={() => onListItemClick(listItemIndex)}
+              >
                 <div className="fsa-list-item-left">
                   <span className="fsa-list-item-name">{i.name}</span>
                 </div>
@@ -292,7 +329,11 @@ export default function Player({
             {!i.isTrack && (
               <a href={i.href}>
                 <div className="fsa-list-item-left">
-                  <span className="fsa-list-item-name">{i.date}{i.venue && ` @ ${i.venue}`}{i.year}</span>
+                  <span className="fsa-list-item-name">
+                    {i.date}
+                    {i.venue && ` @ ${i.venue}`}
+                    {i.year}
+                  </span>
                 </div>
               </a>
             )}
@@ -307,7 +348,15 @@ export default function Player({
             onMouseUp={onBtnMouseUp}
             onClick={onPrevClick}
           >
-            <svg fill="currentColor" role="img" height="16" width="16" viewBox="0 0 16 16"><path d="M13 2.5L5 7.119V3H3v10h2V8.881l8 4.619z"></path></svg>
+            <svg
+              fill="currentColor"
+              role="img"
+              height="16"
+              width="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M13 2.5L5 7.119V3H3v10h2V8.881l8 4.619z"></path>
+            </svg>
           </button>
           <button
             className="fsa-player-button fsa-player-button-play"
@@ -315,8 +364,28 @@ export default function Player({
             onMouseUp={onBtnMouseUp}
             onClick={togglePausePlay}
           >
-            {isPlaying && <svg fill="currentColor" role="img" height="16" width="16" viewBox="0 0 16 16"><path d="M3 2h3v12H3zm7 0h3v12h-3z"></path></svg>}
-            {!isPlaying && <svg fill="currentColor" role="img" height="16" width="16" viewBox="0 0 16 16"><path d="M4.018 14L14.41 8 4.018 2z"></path></svg>}
+            {isPlaying && (
+              <svg
+                fill="currentColor"
+                role="img"
+                height="16"
+                width="16"
+                viewBox="0 0 16 16"
+              >
+                <path d="M3 2h3v12H3zm7 0h3v12h-3z"></path>
+              </svg>
+            )}
+            {!isPlaying && (
+              <svg
+                fill="currentColor"
+                role="img"
+                height="16"
+                width="16"
+                viewBox="0 0 16 16"
+              >
+                <path d="M4.018 14L14.41 8 4.018 2z"></path>
+              </svg>
+            )}
           </button>
           <button
             className="fsa-player-button fsa-player-button-next"
@@ -324,7 +393,15 @@ export default function Player({
             onMouseUp={onBtnMouseUp}
             onClick={onNextClick}
           >
-            <svg fill="currentColor" role="img" height="16" width="16" viewBox="0 0 16 16"><path d="M11 3v4.119L3 2.5v11l8-4.619V13h2V3z"></path></svg>
+            <svg
+              fill="currentColor"
+              role="img"
+              height="16"
+              width="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11 3v4.119L3 2.5v11l8-4.619V13h2V3z"></path>
+            </svg>
           </button>
         </div>
         <div className="fsa-player-other-stuff">
@@ -334,17 +411,28 @@ export default function Player({
               <span className="fsa-player-date">{playerDate}</span>
               <span className="fsa-player-venue">{venue}</span>
             </div>
-            <div className="fsa-player-time">{ elapsed ? millisecondsToMinutesAndSeconds(elapsed * 1000) : "--:--" } / { duration ? millisecondsToMinutesAndSeconds(duration * 1000) : "--:--" }</div>
+            <div className="fsa-player-time">
+              {elapsed
+                ? millisecondsToMinutesAndSeconds(elapsed * 1000)
+                : "--:--"}{" "}
+              /{" "}
+              {duration
+                ? millisecondsToMinutesAndSeconds(duration * 1000)
+                : "--:--"}
+            </div>
           </div>
           <div
             className="fsa-player-scrubber"
             onMouseDown={onScrubberMousedown}
             ref={scrubberRef}
           >
-            <div className="fsa-player-scrubber-elapsed" ref={scrubberElapsedRef}></div>
+            <div
+              className="fsa-player-scrubber-elapsed"
+              ref={scrubberElapsedRef}
+            ></div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -7,7 +7,7 @@ export default function (filename: string) {
   const match = filenameDecoded.match(regex);
 
   if (!match) {
-    throw new Error('Invalid filename format');
+    throw new Error(`Invalid filename format. Filename: ${filename}`);
   }
 
   const [, date, trackNumber, name, venue] = match;

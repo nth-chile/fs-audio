@@ -6,4 +6,4 @@ export type PlayerProps = {
     title: string;
     yearsDirectory?: boolean;
 };
-export default function Player({ data, title: titleFromProps, basePath, backPath, yearsDirectory }: PlayerProps): React.JSX.Element;
+export default function Player({ data, title: titleFromProps, basePath, backPath, yearsDirectory, }: PlayerProps): React.JSX.Element;

@@ -26,19 +26,29 @@
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     box-shadow: 2px 2px 2px #030156;
-    padding: 10px 30px;
+    padding: 10px;
     font-size: 36px;
+
+    @media(width > 768px) {
+      padding: 10px 30px;
+    }
 
     button {
       color: #84ff16;
       font-weight: bold;
       justify-self: start;
+      padding-right: 12px;
     }
 
     h1 {
       color: #84ff16;
       font-weight: bold;
       justify-self: center;
+      font-size: 23px;
+      
+      @media(width > 768px) {
+        font-size: inherit;
+      }
     }
   }
 
@@ -64,10 +74,14 @@
     }
   
     a, button {
-      padding: 30px;
+      padding: 30px 10px;
       display: flex;
       justify-content: space-between;
       width: 100%;
+
+      @media(width > 768px) {
+        padding: 30px;
+      }
     }
   }
 
