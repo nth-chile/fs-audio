@@ -210,7 +210,7 @@ export default function Player({
     let newTitle = pathParts.date || (yearsDirectory && pathParts.year);
 
     if (newTitle && venue) {
-      newTitle = `${newTitle} @ ${venue}`;
+      newTitle = `${newTitle} - ${venue}`;
     }
 
     if (!newTitle) {
@@ -297,7 +297,7 @@ export default function Player({
   return (
     <div className={`fsa-container ${!howl && "fsa-container--player-hidden"}`}>
       <header>
-        <button onClick={goBack}>
+        <button aria-label="back" onClick={goBack}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -331,7 +331,7 @@ export default function Player({
                 <div className="fsa-list-item-left">
                   <span className="fsa-list-item-name">
                     {i.date}
-                    {i.venue && ` @ ${i.venue}`}
+                    {i.venue && ` - ${i.venue}`}
                     {i.year}
                   </span>
                 </div>
@@ -343,6 +343,7 @@ export default function Player({
       <div className="fsa-player">
         <div className="fsa-player-buttons">
           <button
+            aria-label="previous"
             className="fsa-player-button fsa-player-button-prev"
             onMouseDown={onBtnMouseDown}
             onMouseUp={onBtnMouseUp}
@@ -359,6 +360,7 @@ export default function Player({
             </svg>
           </button>
           <button
+            aria-label="play/pause"
             className="fsa-player-button fsa-player-button-play"
             onMouseDown={onBtnMouseDown}
             onMouseUp={onBtnMouseUp}
@@ -388,6 +390,7 @@ export default function Player({
             )}
           </button>
           <button
+            aria-label="next"
             className="fsa-player-button fsa-player-button-next"
             onMouseDown={onBtnMouseDown}
             onMouseUp={onBtnMouseUp}

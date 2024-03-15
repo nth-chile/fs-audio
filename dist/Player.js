@@ -173,7 +173,7 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     (0, react_1.useEffect)(() => {
         let newTitle = pathParts.date || (yearsDirectory && pathParts.year);
         if (newTitle && venue) {
-            newTitle = `${newTitle} @ ${venue}`;
+            newTitle = `${newTitle} - ${venue}`;
         }
         if (!newTitle) {
             newTitle = titleFromProps;
@@ -246,7 +246,7 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     }
     return (react_1.default.createElement("div", { className: `fsa-container ${!howl && "fsa-container--player-hidden"}` },
         react_1.default.createElement("header", null,
-            react_1.default.createElement("button", { onClick: goBack },
+            react_1.default.createElement("button", { "aria-label": "back", onClick: goBack },
                 react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "25", height: "25", viewBox: "-78.5 0 512 512" },
                     react_1.default.createElement("path", { fill: "currentColor", d: "m257 64 34 34-163 164 163 164-34 34L61 262 257 64Z" }))),
             react_1.default.createElement("h1", null, title)),
@@ -259,19 +259,19 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
                 react_1.default.createElement("div", { className: "fsa-list-item-left" },
                     react_1.default.createElement("span", { className: "fsa-list-item-name" },
                         i.date,
-                        i.venue && ` @ ${i.venue}`,
+                        i.venue && ` - ${i.venue}`,
                         i.year)))))))),
         react_1.default.createElement("div", { className: "fsa-player" },
             react_1.default.createElement("div", { className: "fsa-player-buttons" },
-                react_1.default.createElement("button", { className: "fsa-player-button fsa-player-button-prev", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: onPrevClick },
+                react_1.default.createElement("button", { "aria-label": "previous", className: "fsa-player-button fsa-player-button-prev", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: onPrevClick },
                     react_1.default.createElement("svg", { fill: "currentColor", role: "img", height: "16", width: "16", viewBox: "0 0 16 16" },
                         react_1.default.createElement("path", { d: "M13 2.5L5 7.119V3H3v10h2V8.881l8 4.619z" }))),
-                react_1.default.createElement("button", { className: "fsa-player-button fsa-player-button-play", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: togglePausePlay },
+                react_1.default.createElement("button", { "aria-label": "play/pause", className: "fsa-player-button fsa-player-button-play", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: togglePausePlay },
                     isPlaying && (react_1.default.createElement("svg", { fill: "currentColor", role: "img", height: "16", width: "16", viewBox: "0 0 16 16" },
                         react_1.default.createElement("path", { d: "M3 2h3v12H3zm7 0h3v12h-3z" }))),
                     !isPlaying && (react_1.default.createElement("svg", { fill: "currentColor", role: "img", height: "16", width: "16", viewBox: "0 0 16 16" },
                         react_1.default.createElement("path", { d: "M4.018 14L14.41 8 4.018 2z" })))),
-                react_1.default.createElement("button", { className: "fsa-player-button fsa-player-button-next", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: onNextClick },
+                react_1.default.createElement("button", { "aria-label": "next", className: "fsa-player-button fsa-player-button-next", onMouseDown: onBtnMouseDown, onMouseUp: onBtnMouseUp, onClick: onNextClick },
                     react_1.default.createElement("svg", { fill: "currentColor", role: "img", height: "16", width: "16", viewBox: "0 0 16 16" },
                         react_1.default.createElement("path", { d: "M11 3v4.119L3 2.5v11l8-4.619V13h2V3z" })))),
             react_1.default.createElement("div", { className: "fsa-player-other-stuff" },
