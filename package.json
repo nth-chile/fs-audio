@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": ".",
   "name": "fs-shows",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "volta": {
     "node": "18.16.1"
   },
