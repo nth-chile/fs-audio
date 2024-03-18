@@ -184,9 +184,13 @@
     border-radius: 3px;
     box-shadow: 0.5px 0.5px 0.5px #2c0297;
     cursor: pointer;
-    height: 10px;
+    height: 16px;
     background: linear-gradient(to bottom, #84ff16, #6be600);
     overflow: hidden;
+
+    @media (width > 768px) {
+      height: 10px;
+    }
   }
 
   .fsa-player-scrubber-elapsed {

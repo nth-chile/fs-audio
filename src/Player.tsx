@@ -57,6 +57,8 @@ export default function Player({
   const [playerDate, setPlayerDate] = useState("");
   const [venue, setVenue] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
+  // When user clicks on scrubber, this is set to true. On window.onmouseup, it goes back to false
+  const [isMousedownOnScrubber, setIsMousedownOnScrubber] = useState(false);
   // This is the index of element in listItems, not of props.data
   const currentTrackListItemIndex = useRef<number | null>(null);
   const playbackInterval = useRef<any>(null);
@@ -239,6 +241,29 @@ export default function Player({
     }
   }, [elapsed, duration]);
 
+  useEffect(() => {
+    function onMouseup() {
+      setIsMousedownOnScrubber(false);
+    }
+
+    function onMouseMove(e: MouseEvent | TouchEvent) {
+      if (!isMousedownOnScrubber) return;
+      updateScrubberPosition(e);
+    }
+
+    window.addEventListener("mouseup", onMouseup);
+    window.addEventListener("touchend", onMouseup);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onMouseMove);
+
+    return () => {
+      window.removeEventListener("mouseup", onMouseup);
+      window.removeEventListener("touchend", onMouseup);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onMouseMove);
+    };
+  }, [isMousedownOnScrubber]);
+
   function onBtnMouseDown(e: React.MouseEvent<HTMLButtonElement>) {
     if (e.target instanceof HTMLElement) {
       e.target.classList.add("fsa-player-button--pressed");
@@ -251,7 +276,12 @@ export default function Player({
     }
   }
 
-  function onScrubberMousedown(e: React.MouseEvent<HTMLDivElement>) {
+  function onScrubberMouseDown(e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) {
+    setIsMousedownOnScrubber(true);
+    updateScrubberPosition(e);
+  }
+
+  function updateScrubberPosition(e: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent) {
     const zeroPos = scrubberRef.current?.getBoundingClientRect().left;
     const total = scrubberRef.current?.getBoundingClientRect().width;
 
@@ -259,7 +289,8 @@ export default function Player({
       return;
     }
 
-    setUserScrubPercent(((e.clientX - zeroPos) / total) * 100);
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    setUserScrubPercent(((clientX - zeroPos) / total) * 100);
   }
 
   function onPrevClick() {
@@ -304,7 +335,10 @@ export default function Player({
             height="25"
             viewBox="-78.5 0 512 512"
           >
-            <path fill="currentColor" d="m257 64 34 34-163 164 163 164-34 34L61 262 257 64Z" />
+            <path
+              fill="currentColor"
+              d="m257 64 34 34-163 164 163 164-34 34L61 262 257 64Z"
+            />
           </svg>
         </button>
         <h1>{title}</h1>
@@ -426,7 +460,8 @@ export default function Player({
           </div>
           <div
             className="fsa-player-scrubber"
-            onMouseDown={onScrubberMousedown}
+            onMouseDown={onScrubberMouseDown}
+            onTouchStart={onScrubberMouseDown}
             ref={scrubberRef}
           >
             <div
