@@ -49,6 +49,8 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
     const [playerDate, setPlayerDate] = (0, react_1.useState)("");
     const [venue, setVenue] = (0, react_1.useState)("");
     const [isPlaying, setIsPlaying] = (0, react_1.useState)(false);
+    // When user clicks on scrubber, this is set to true. On window.onmouseup, it goes back to false
+    const [isMousedownOnScrubber, setIsMousedownOnScrubber] = (0, react_1.useState)(false);
     // This is the index of element in listItems, not of props.data
     const currentTrackListItemIndex = (0, react_1.useRef)(null);
     const playbackInterval = (0, react_1.useRef)(null);
@@ -196,6 +198,26 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
             scrubberElapsedRef.current.style.width = (elapsed / duration) * 100 + "%";
         }
     }, [elapsed, duration]);
+    (0, react_1.useEffect)(() => {
+        function onMouseup() {
+            setIsMousedownOnScrubber(false);
+        }
+        function onMouseMove(e) {
+            if (!isMousedownOnScrubber)
+                return;
+            updateScrubberPosition(e);
+        }
+        window.addEventListener("mouseup", onMouseup);
+        window.addEventListener("touchend", onMouseup);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("touchmove", onMouseMove);
+        return () => {
+            window.removeEventListener("mouseup", onMouseup);
+            window.removeEventListener("touchend", onMouseup);
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("touchmove", onMouseMove);
+        };
+    }, [isMousedownOnScrubber]);
     function onBtnMouseDown(e) {
         if (e.target instanceof HTMLElement) {
             e.target.classList.add("fsa-player-button--pressed");
@@ -206,14 +228,19 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
             e.target.classList.remove("fsa-player-button--pressed");
         }
     }
-    function onScrubberMousedown(e) {
+    function onScrubberMouseDown(e) {
+        setIsMousedownOnScrubber(true);
+        updateScrubberPosition(e);
+    }
+    function updateScrubberPosition(e) {
         var _a, _b;
         const zeroPos = (_a = scrubberRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect().left;
         const total = (_b = scrubberRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect().width;
         if (!zeroPos || !total) {
             return;
         }
-        setUserScrubPercent(((e.clientX - zeroPos) / total) * 100);
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        setUserScrubPercent(((clientX - zeroPos) / total) * 100);
     }
     function onPrevClick() {
         var _a;
@@ -290,7 +317,7 @@ function Player({ data, title: titleFromProps, basePath, backPath, yearsDirector
                         duration
                             ? (0, millisecondsToMinutesAndSeconds_1.default)(duration * 1000)
                             : "--:--")),
-                react_1.default.createElement("div", { className: "fsa-player-scrubber", onMouseDown: onScrubberMousedown, ref: scrubberRef },
+                react_1.default.createElement("div", { className: "fsa-player-scrubber", onMouseDown: onScrubberMouseDown, onTouchStart: onScrubberMouseDown, ref: scrubberRef },
                     react_1.default.createElement("div", { className: "fsa-player-scrubber-elapsed", ref: scrubberElapsedRef }))))));
 }
 exports.default = Player;
